@@ -8,6 +8,7 @@ import (
 	"github.com/songquanpeng/one-api/relay/meta"
 	"io"
 	"net/http"
+	"time"
 )
 
 func SetupCommonRequestHeader(c *gin.Context, req *http.Request, meta *meta.Meta) {
@@ -39,7 +40,10 @@ func DoRequestHelper(a Adaptor, c *gin.Context, meta *meta.Meta, requestBody io.
 }
 
 func DoRequest(c *gin.Context, req *http.Request) (*http.Response, error) {
+	start := time.Now()
 	resp, err := client.HTTPClient.Do(req)
+	duration := time.Since(start).Milliseconds()
+
 	if err != nil {
 		return nil, err
 	}
@@ -48,5 +52,9 @@ func DoRequest(c *gin.Context, req *http.Request) (*http.Response, error) {
 	}
 	_ = req.Body.Close()
 	_ = c.Request.Body.Close()
+
+	// 写入上游响应时间
+	c.Writer.Header().Set("x-one-api-upstream-time", fmt.Sprintf("%d", duration))
+
 	return resp, nil
 }
