@@ -106,7 +106,9 @@ func main() {
 	//server.Use(gzip.Gzip(gzip.DefaultCompression))
 	server.Use(middleware.RequestId())
 	server.Use(middleware.Language())
-	middleware.SetUpLogger(server)
+	if config.EnableHttpAccessLog {
+		middleware.SetUpLogger(server)
+	}
 	// Initialize session store
 	store := cookie.NewStore([]byte(config.SessionSecret))
 	server.Use(sessions.Sessions("session", store))

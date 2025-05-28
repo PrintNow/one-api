@@ -160,6 +160,8 @@ var OnlyOneLogFile = env.Bool("ONLY_ONE_LOG_FILE", false)
 
 var LogLevel = env.String("LOG_LEVEL", "INFO")
 
+var EnableHttpAccessLog = env.Bool("ENABLE_HTTP_ACCESS_LOG", true)
+
 var RelayProxy = env.String("RELAY_PROXY", "")
 var UserContentRequestProxy = env.String("USER_CONTENT_REQUEST_PROXY", "")
 var UserContentRequestTimeout = env.Int("USER_CONTENT_REQUEST_TIMEOUT", 30)
